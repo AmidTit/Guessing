@@ -1,53 +1,73 @@
 import random
-from math import *
+import math
 
-# Тут, короче, наскоряк накиданная клёвая игра в угадайку.
-#  * Оно число загадывает, а пользователь потом угадывает.
-#  * Есть подсказки, на сколько далеко.
-#  * todo: DRY, KISS, SOLID (точно можно на ООП-шить), и опечатки по мелочи
-#  */
+class GuessNumber:
 
-def main():
-    answer = input("Привет!\nБудешь угадывать? (да/нет): ")
-    if answer == "нет":
-        print("(x__x)")
-        exit()
-    elif answer != "да":
-        print("(︶︹︺)\n непонятно, давай до свидания")
-        exit()
-    print("(⌒‿⌒)")
+    def generate_number(self):
 
-    while True:
-        rand = random.randint(0, 10) + 1
-        print("угадай число от 1 до 10")
+        return random.randint(self.lower, self.upper)
+    
+    
+    def __init__(self, lower = 0, upper = 10):
+
+        self.lower, self.upper = lower, upper
+        self.win_number = self.generate_number()
+
+
+    def play_game(self):
+
         while True:
-            number = int(input())
-            if number == rand:
-                print("╰(▔∀▔)╯")
-                answer = input("Будешь угадывать? (да/нет): ")
-                if answer == "нет":
-                    print("(¬_¬)")
-                    exit()
-                elif answer != "да":
-                    print("(︶︹︺)\n непонятно, давай до свидания")
-                    exit()
-                else:    
-                    main()
-            else:
-                if number < 1 or number > 10:
-                    print("Читать не умеешь?")
-                elif abs(number - rand) > 5:
-                    print("Холодно")
-                elif abs(number - rand) > 2:
-                    print("Тепло")
+
+            rand = self.generate_number()
+            print("угадай число от %d до %d: " % (lower, upper))
+
+            while True:
+
+                number = int(input())
+
+                if number == rand:
+                    print("╰(▔∀▔)╯")
+                    self.greeting(i=1)
+
                 else:
-                    print("Жгётся!")      
 
+                    if number < lower or number > upper:
+                        print("Читать не умеешь?")
 
+                    elif abs(number - rand) > 5:
+                        print("Холодно")
+
+                    elif abs(number - rand) > 2:
+                        print("Тепло")
+
+                    else:
+                        print("Жгётся!")
+                         
+
+    def greeting(self, i=0):
+
+        answers_list = ["Привет!\nБудешь угадывать? (да/нет): ", "Поиграем еще? (да/нет): "]
+        answer = input(answers_list[i]).lower()
+
+        if answer == "нет":
+
+            print("(x__x)")
+            return 
+        
+        elif answer != "да":
+
+            print("(︶︹︺)\n непонятно, давай до свидания")
+            return
+        
+        else:
+            print("(⌒‿⌒)")
+            self.play_game()
+
+    
 if __name__ == "__main__":
-
-    main()
-
+    lower, upper = 0, 10
+    guess_num = GuessNumber()
+    guess_num.greeting()
 
 
 
